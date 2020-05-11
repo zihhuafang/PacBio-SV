@@ -1,0 +1,5 @@
+Number of nucleotides affected by SV:
+INS:	5341 variants	1282207bp
+DEL:	7031 variants	3960301bp
+DUP:	9 variants	1062bp
+INV:	1 variants	482184bp
