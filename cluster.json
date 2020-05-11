@@ -1,0 +1,43 @@
+{
+    "__default__" :
+    {
+        "ncore" : 10,
+        "memo" : 2000,
+        "jobtime" : "24:00",
+	"jobname" : "{rule}_{wildcards.ref}",
+        "logi" : "loglsf/{rule}_{wildcards.ref}.log"
+    },
+    "ngmlr_aln" :
+    {   
+	"ncore" : 15,
+        "memo" : 5000,
+	"jobtime" : "120:00",
+        "jobname" : "{rule}_{wildcards.ref}",
+        "logi" : "loglsf/{rule}_{wildcards.ref}.log"
+    },
+    "pbmm2_align" :
+    {
+        "ncore" : 15,
+        "memo" : 2000,
+        "jobtime" : "04:00",
+        "jobname" : "{rule}_{wildcards.ref}",
+        "logi" : "loglsf/{rule}_{wildcards.ref}.log"
+    },
+    "pbsv_signature" :
+    {
+        "ncore" : 15,
+        "memo" : 4000,
+        "jobtime" : "120:00",
+        "jobname" : "{rule}_{wildcards.ref}",
+        "logi" : "loglsf/{rule}_{wildcards.ref}.log"
+    },
+    "pbsv_call_sv" :
+    {
+        "ncore" : 15,
+        "memo" : 4000,
+        "jobtime" : "120:00",
+        "jobname" : "{rule}_{wildcards.ref}",
+        "logi" : "loglsf/{rule}_{wildcards.ref}.log"
+    }
+}
+

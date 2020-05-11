@@ -1,0 +1,29 @@
+resources:
+    genomedir: /nfs/nas12.ethz.ch/fs1201/green_groups_tg_public/data/fang/pacbio_snake/ref
+    fastqdir: /nfs/nas12.ethz.ch/fs1201/green_groups_tg_public/data/fang/fastq
+    outdir: /nfs/nas12.ethz.ch/fs1201/green_groups_tg_public/data/fang/pacbio_snake
+tools:
+    NGMLR: /cluster/work/pausch/fang/ngmlr-0.2.8-dev/ngmlr #/cluster/work/pausch/fang/ngmlr-0.2.7/ngmlr
+    SNIFFLES: /cluster/work/pausch/fang/Sniffles-master/bin/sniffles-core-1.0.11/sniffles
+    MINIMAP2: /cluster/work/pausch/fang/minimap2-2.17_x64-linux/minimap2
+    PBMM2: /cluster/work/pausch/group_bin/anaconda3/envs/pbsv/bin/pbmm2
+    PBSV: /cluster/work/pausch/group_bin/anaconda3/envs/pbsv/bin/pbsv
+    SAMTOOLS: /cluster/work/pausch/group_bin/anaconda3/envs/pipeline-structural-variation/bin/samtools
+    PLOTCOVERAGE: /cluster/work/pausch/group_bin/anaconda3/envs/deeptools/bin/plotCoverage
+    BCFTOOLS: /cluster/work/pausch/group_bin/bcftools-1.8/bcftools
+    PICARD: /cluster/apps/gcc-4.8.5/picard-2.18.17-jiviugfnvhk4qlzbcugx6bpzixgb7znb/bin/picard.jar
+    SURVIVOR: /cluster/work/pausch/fang/SURVIVOR/Debug/SURVIVOR
+    VCFANNO: /cluster/work/pausch/group_bin/anaconda3/envs/SV-workflow/bin/vcfanno
+    VEP: /cluster/work/pausch/meenu/vcf_UCD_2019_05/ensembl-vep/vep
+#Sample name
+sample_name: "bov_137"
+
+
+#run as 
+#dry run
+#snakemake --jobs 100 --latency-wait 60 -nrp --use-conda --cluster-config cluster.json --cluster "bsub -J {cluster.jobname} -n {cluster.ncore} -W {cluster.jobtime} -o {cluster.logi} -R \"rusage[mem={cluster.memo}]\""
+#
+#snakemake --jobs 100 --latency-wait 60 -nrp --cluster-config cluster.json --cluster "bsub -J {cluster.jobname} -n {cluster.ncore} -W {cluster.jobtime} -o {cluster.logi} -R \"rusage[mem={cluster.memo}]\""
+#
+#visulize work graph: module load graphviz/2.40.1
+#snakemake --rulegraph | dot -Tpng > rulegraph.png 
