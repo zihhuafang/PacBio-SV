@@ -1,4 +1,4 @@
-rule sniffles:
+checkpoint sniffles:
     input:
         OUTDIR + "/{ref}/{aligner}/alignment/{sample}_merge.bam"
     output:
@@ -8,25 +8,26 @@ rule sniffles:
         min_mq = 20,
         read_support = 5,
         min_length = 50
-   envmodules:
-        "intel/18.0.1" 
-   shell:
+    envmodules:
+        "intel/18.0.1"
+    shell:
         """
         {params.sniffles} -m {input} -v {output} -s {params.read_support} -q {params.min_mq} -l {params.min_length} --genotype --report_read_strands
         """
 
-rule pbsv_signature:
+checkpoint pbsv_signature:
     input:
         OUTDIR + "/{ref}/{aligner}/alignment/{sample}_merge.bam"
     output:
         temp(OUTDIR + "/{ref}/{aligner}/sv_calls/{sample}_pbsv.svsig.gz")
     conda:
         "../envs/pacbio.yml"
+    params:
+        map_Q = 20
     shell:
         """
-
-        pbsv discover {input} {output}
-
+        pbsv discover -q {params.map_Q} {input} {output}
+        
         """
 
 rule pbsv_call_sv:
@@ -34,48 +35,18 @@ rule pbsv_call_sv:
         svsig = OUTDIR + "/{ref}/{aligner}/sv_calls/{sample}_pbsv.svsig.gz",
         ref = GENOMEDIR + "/{ref}_ref.fa"
     output:
-        temp(OUTDIR + "/{ref}/{aligner}/sv_calls/{sample}.ins+del+inv.vcf")
-    conda:
-        "../envs/pacbio.yml"
-    shell:
-        """
-        pbsv call --types INS,DEL,INV,DUP,CNV {input.ref} {input.svsig} {output}
-
-        """
-
-rule pbsv_call_bnd:
-    input:
-        svsig = OUTDIR + "/{ref}/{aligner}/sv_calls/{sample}_pbsv.svsig.gz",
-        ref = GENOMEDIR + "/{ref}_ref.fa"
-    output:
-        temp(OUTDIR + "/{ref}/{aligner}/sv_calls/{sample}.bnd.vcf")
-    conda:
-        "../envs/pacbio.yml"
-    shell:
-        """
-        pbsv call --types BND  {input.ref} {input.svsig} {output}
-        """
-
-rule merge_pbsv:
-    input:
-        sv= OUTDIR + "/{ref}/{aligner}/sv_calls/{sample}.ins+del+inv.vcf",
-        bnd= OUTDIR + "/{ref}/{aligner}/sv_calls/{sample}.bnd.vcf"
-    output:
         OUTDIR + "/{ref}/{aligner}/sv_calls/{sample}_pbsv.vcf"
-    params:
-        picard= config["tools"]["PICARD"]
+    conda:
+        "../envs/pacbio.yml"
+    threads:
+        10
     shell:
         """
-        module load jdk picard/2.18.17
-
-        java -jar {params.picard} SortVcf \
-                I={input.sv} \
-                I={input.bnd} \
-                O={output}
+        pbsv call -j {threads} {input.ref} {input.svsig} {output}
 
         """
 
-rule svim_call:
+checkpoint svim_call:
     input:
         BAM = OUTDIR + "/{ref}/{aligner}/alignment/{sample}_merge.bam",
         ref = GENOMEDIR + "/{ref}_ref.fa"
@@ -99,7 +70,6 @@ rule svim_filter:
         filtered = OUTDIR + "/{ref}/{aligner}/sv_calls/svim_{sample}/variants_filtered.vcf.gz"
     shell:
         """
-
         cat {input}  \
         | sed 's/INS:NOVEL/INS/g' \
         | sed 's/DUP:INT/DUP/g' \

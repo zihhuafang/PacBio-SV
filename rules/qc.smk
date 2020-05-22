@@ -5,11 +5,11 @@ rule aln_stats:
         OUTDIR + "/{ref}/{aligner}/alignment/{sample}_bam.stats"
     envmodules:
         "gcc/4.8.5",
-        "python_cpu/3.6.4"
+        "python_cpu/3.6.4"    
     shell:
         """
         export PATH=$PATH:/cluster/work/pausch/group_bin/anaconda3/envs/surpyvor
-        ../scripts/alignment_stats.py {input} --output {output}
+        ./scripts/alignment_stats.py {input} --output {output}
 
         """
 
